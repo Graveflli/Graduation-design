@@ -48,24 +48,17 @@ cd = ColorDescriptor((8, 12, 3))
 tk_im = []
 
 # use this to store button and destroy them
-tk_button = []
-# use this to count the number of button (to destroy them)
-# button_num = 0
+button_list = []
 
-# imageOutput = tk.Button(root, width=w_box, height=h_box)
 def call_back(imagepath):
     print(imagepath)
-    # if status.get() == 1:
     e = tk.StringVar()
     out = tk.Label(root, textvariable=e)
     out.grid(row=8, columnspan=5)
 
     global i
-    # i += 1
-    e.set(imagepath)
 
-    # nowtime = os.popen('date')
-    # print(nowtime.read())
+    e.set(imagepath)
 
     # command like :  python search.py --index index.csv --query queries/108100.png --result-path dataset
 
@@ -80,118 +73,63 @@ def call_back(imagepath):
     searcher = Searcher("index.csv")
     results = searcher.search(features)
 
-    # display the query
-    # cv2.imshow("Query", query)
-
-    # testpath = r"C:\Users\DYL18\Desktop\Graduation_design\vacation-image-search-engine\dataset\103500.png"
-    '''
-    a = Image.open(testpath)
-    b = resize(w_box, h_box, a)
-    d = ImageTk.PhotoImage(image=b)
-    # imageOutput = tk.Button(root,text = "haha")
-    imageOutput = tk.Button(root, image=d, width=w_box, height=h_box)
-    imageOutput.grid(row=12, column=0, rowspan=6)
-    print("hahaha")
-
-    '''
     j = 0
     k = 0
 
     #destroy all of button or label here:
-    global tk_button
-    for a in tk_button:
+    global button_list
+    for a in button_list:
         print(a)
         a.destroy()
-    tk_button = []
-
-    '''
-    global button_num
-    if button_num > 0:
-        button_num = button_num - 1
-    while button_num != 0:
-        tk_button[button_num].destroy()
-        button_num = button_num - 1
-    # for but in button_num:
-    #   tk_button[but].destroy()
-    button_num = 0
-    '''
+    button_list = []
 
     # tk_im_path = []
     # loop over the results
     for (score, resultID) in results:
         # load the result image and display it
 
-        # path2 = "dataset" + "\\" + resultID
         path2 = datapath + "\\" + resultID
         print(path2)
 
         pil_image2 = Image.open(path2)
-        # tk_im_path.append(pil_image2)
 
         pil_image_resized2 = resize(w_box, h_box, pil_image2)
-        # photograph = ImageTk.PhotoImage(pil_image_resized2)
-        tk_im.append(ImageTk.PhotoImage(pil_image_resized2))
+        # tk_im.append(ImageTk.PhotoImage(pil_image_resized2))
 
-        imageOutput = tk.Button(root, image=tk_im[j], width=w_box, height=h_box)
+        # imageOutput = tk.Button(root, image=tk_im[j], width=w_box, height=h_box)
+        a = ImageTk.PhotoImage(pil_image_resized2)
+        imageOutput = tk.Button(root, image=a, width=w_box, height=h_box)
 
-        tk_button.append(imageOutput)
+        button_list.append(imageOutput)
 
-        tk_button[j].image = tk_im[j]
-        tk_button[j].grid(row=int(9 + (k * 8)), column=int(j % 6), rowspan=6)
-
-        # button_num = button_num + 1
-
-        # imageOutput.configure(image=tk_im[j])
-        # imageOutput.image = tk_im[j]
-        # imageOutput.grid(row=int(9 + (k * 8)), column=int(j % 6), rowspan=6)
-
-        # imageOutput.destroy()
+        # button_list[j].image = tk_im[j]
+        button_list[j].image = a
+        button_list[j].grid(row=int(9 + (k * 8)), column=int(j % 6), rowspan=6)
 
         j = j + 1
         k = int(j / 6)
 
-        # root.update_idletasks()
-
-    for a in tk_button:
+    for a in button_list:
         print(a)
-    '''
-        result = cv2.imread(path)
-        cv2.imshow("Result", result)
-        cv2.waitKey(0)
-        '''
 
 
 tk_image = []
 tk_image_path = []
 for imagepath in glob.glob(path + "/*.png"):
     pil_image = Image.open(imagepath)
-    # print(imagepath)
+
     tk_image_path.append(imagepath)
     print(tk_image_path[i - 1])
-    # tk_image_path[i - 1] = imagepath
-
-    # image = cv2.imread(imagepath)
-    # cv2.imshow("image",image)
-    # cv2.waitKey(0)
 
     pil_image_resized = resize(w_box,h_box,pil_image)
     tk_image.append(ImageTk.PhotoImage(pil_image_resized))
 
-    '''
-    cb = (lambda p: lambda: call_back(p))(imagepath)
-    button = tk.Button(root, image=tk_image[i - 1], width=w_box, height=h_box, command=cb)
-    '''
-    # c = imagepath
-    # button = tk.Button(root, image=tk_image[i - 1], width=w_box, height=h_box, command=lambda : call_back(c))
-    # python BUG:imagepath 循环一圈，我调用command callback的时候传入此作为参数，结果是最后的image的path 但在一般人眼里imagepath作为局部变量
-    # 但从结果来看并非如此，郭氏便先用c作为变量等于imagepath 在赋值过去，依然不行，使出大招：俩lambda，结果对了，我也无语了。。wtfpython
     cb = (lambda p: lambda: call_back(p))(imagepath)
     button = tk.Button(root, image=tk_image[i - 1], width=w_box, height=h_box, command=cb)
 
     # global i
     i += 1
     print(i)
-    # button.pack()
     button.grid(row=1, column=i - 2, rowspan=6, sticky='w')
 
 
