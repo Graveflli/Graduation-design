@@ -17,8 +17,12 @@ class Selectdir(object):
 
         self.root.geometry("1280x600")
 
+        # use these two folderpath to save the path of dataset and queryset (default under this line)
         self.root.queryfolder = r"C:\Users\DYL18\Desktop\Graduation_design\vacation-image-search-engine\queries"
         self.root.datafolder = r"C:\Users\DYL18\Desktop\Graduation_design\vacation-image-search-engine\dataset"
+        # path to save index.csv
+        self.root.indexcsvpath = self.root.queryfolder + "\\"
+        # "C:/Users/DYL18/Desktop/Graduation_design/vacation-image-search-engine/queries/"
 
         self.createpage()
 
@@ -43,32 +47,27 @@ class Selectdir(object):
         querybutton = tk.Button(self.frame, text="选择查询集", width=30, height=8, command=lambda: choosequerydir())
         querybutton.grid(row=5, column=1, sticky='w')
 
-        enterbutton = tk.Button(self.frame, text="进入检索界面",width=60, height=5, command=lambda: enter())
+        enterbutton = tk.Button(self.frame, text="进入检索界面", width=60, height=5, command=lambda: enter())
         enterbutton.grid(row=6, column=0, columnspan=2)
 
 
         def choosedatadir():
-            # self.root.datafolder = filedialog.askdirectory(parent=self.frame, initialdir="/", title="请选择数据集")
             self.root.datafolder = filedialog.askdirectory(parent=self.frame, initialdir=os.getcwd(), title="请选择数据集")
             print(self.root.datafolder)
 
-            # datapath = r"C:\Users\DYL18\Desktop\Graduation_design\vacation-image-search-engine\dataset"
-            # querypath = r"C:\Users\DYL18\Desktop\Graduation_design\vacation-image-search-engine\queries"
             querypath = "C:/Users/DYL18/Desktop/Graduation_design/vacation-image-search-engine/queries/"
             path = "C:/Users/DYL18/Desktop/Graduation_design/vacation-image-search-engine/"
-            # datapath = "C://Users//DYL18//Desktop//Graduation_design//vacation-image-search-engine//dataset"
-            # querypath = "C://Users//DYL18//Desktop//Graduation_design//vacation-image-search-engine//queries//"
-            # path = "C://Users//DYL18//Desktop//Graduation_design//vacation-image-search-engine//"
 
-            # cmd = "python " + path + "index.py --dataset " + datapath + " --index " + querypath + "index.csv"
+            # use index.py to make index.csv (if self.root.datafolder doesn't give then use default)
+            # but U need to click to call this command so..
             cmd = "python " + path + "index.py --dataset " + self.root.datafolder + " --index " + querypath + "index.csv"
             print(cmd)
             # cmd = "python index.py --dataset dataset --index index.csv"
             os.system(cmd)
 
         def choosequerydir():
-            # self.root.queryfolder = filedialog.askopenfilename(parent=self.frame, initialdir="/", title="请选择查询集")
-            self.root.queryfolder = filedialog.askdirectory(parent=self.frame, initialdir="/", title="请选择查询集")
+            self.root.queryfolder = filedialog.askdirectory(parent=self.frame, initialdir=os.getcwd(), title="请选择查询集")
+            print("*****")
             print(self.root.queryfolder)
 
             cmd = "python --version"

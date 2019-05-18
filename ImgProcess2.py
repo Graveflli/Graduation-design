@@ -56,14 +56,30 @@ class ImgProcess2(object):
         # command like :  python search.py --index index.csv --query queries/108100.png --result-path dataset
 
         imageID = imagepath[imagepath.rfind("\\") + 1:]
-        querypath = "queries/" + imageID
+        # * querypath = "queries/" + imageID
+
+
+        # querypath = self.root.queryfolder + "\\" + imageID
+        querypath = self.root.indexcsvpath + imageID
+        querypath = imagepath
+        print("Attention !! this is the query path: ")
+        print(querypath)
+
 
         # load the query image and describe it
         query = cv2.imread(querypath)
+
+        print(query)
+        # 调试
+        cv2.imshow("Result", query)
+        cv2.waitKey(0)
+
         features = cd.describe(query)
 
         # perform the search
-        searcher = Searcher("index.csv")
+        # searcher = Searcher("index.csv")
+        p = self.root.indexcsvpath + "index.csv"
+        searcher = Searcher(p)
         results = searcher.search(features)
 
         j = 0
@@ -81,6 +97,7 @@ class ImgProcess2(object):
         for (score, resultID) in results:
             # load the result image and display it
 
+            # 必须要选择数据集才能得到正确的datafolder路径并因此得出结果
             path2 = self.root.datafolder + "\\" + resultID
             print(path2)
 
@@ -126,34 +143,44 @@ class ImgProcess2(object):
         button_list = []
 
 
-        if self.root.queryfolder == '':
-            path = r"C:\Users\DYL18\Desktop\Graduation_design\vacation-image-search-engine\queries"
-        else:
-            path = self.root.queryfolder
-
-        if self.root.datafolder == '':
-            datapath = r"C:\Users\DYL18\Desktop\Graduation_design\vacation-image-search-engine\dataset"
-        else:
-            datapath = self.root.datafolder
+        # if self.root.queryfolder == '':
+        #     path = r"C:\Users\DYL18\Desktop\Graduation_design\vacation-image-search-engine\queries"
+        # else:
+        #     path = self.root.queryfolder
+        #
+        # if self.root.datafolder == '':
+        #     datapath = r"C:\Users\DYL18\Desktop\Graduation_design\vacation-image-search-engine\dataset"
+        # else:
+        #     datapath = self.root.datafolder
+        path = self.root.queryfolder
 
         self.textframe = tk.Frame(self.root, width=1380, height=200)
         self.textframe.grid(row=0, column=0, columnspan=10)
         ft = tkFont.Font(family='Fixdsys', size=20, weight=tkFont.BOLD)
         text = tk.Label(self.textframe,
-                        text="This is a CBIR app, Please click the following image to search others,hahahahaha",font=ft)
+                        text="This is a CBIR app, Please click the following image to search others\n"
+                             "这是基于内容的图像检索系统，请点击下面的图片以查询内容相关联的其他图片", font=ft)
         text.grid(row=0, column=0, columnspan=5, sticky='e')
         self.textframe.grid_rowconfigure(0, weight=1)
 
         self.frame = tk.Frame(self.root, width=1580, height=400)
         self.frame.grid(row=1, column=0)
-        self.canvas = tk.Canvas(self.frame, bg='red', width=1500, height=300, scrollregion=(0, 0, 1600, 1000))
+        self.canvas = tk.Canvas(self.frame, bg='red', width=1500, height=300, scrollregion=(0, 0, 2600, 1000))
         self.canvas.create_line(0, 0, 200, 100)
 
         global tk_image
         tk_image = []
         global tk_image_path
         tk_image_path = []
-        for imagepath in glob.glob(path + "/*.png"):
+
+        globpath = []
+        globpath = globpath + glob.glob(path + "/*.png")
+        globpath = globpath + glob.glob(path + "/*.jpg")
+
+        print("test if its right")
+        print(globpath)
+        # for imagepath in glob.glob(path + "/*.png"):
+        for imagepath in globpath:
             pil_image = Image.open(imagepath)
 
             tk_image_path.append(imagepath)
@@ -189,7 +216,7 @@ class ImgProcess2(object):
 
         self.frame2 = tk.Frame(self.root, width=1580, height=400)
         self.frame2.grid(row=2, column=0)
-        self.canvas2 = tk.Canvas(self.frame2, bg='green', width=1500, height=400, scrollregion=(0, 0, 1600, 1000))
+        self.canvas2 = tk.Canvas(self.frame2, bg='green', width=1500, height=400, scrollregion=(0, 0, 2600, 1000))
 
         hbar2 = tk.Scrollbar(self.frame2, orient='horizontal')
         hbar2.grid(row=1, column=0, sticky='we')
