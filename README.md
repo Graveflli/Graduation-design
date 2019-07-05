@@ -2,6 +2,32 @@
 
 ## CBIR with python OpenCV and tkinter
 
+------
+
+## Usage
+
+#### Environment
+
+- python3		->	 tkinter, OpenCV (the IDE is pycharm)
+- MongoDB
+
+#### Prepare
+
+- dataset folder : [INRIA Holidays Dataset](http://lear.inrialpes.fr/people/jegou/data.php) is dataset of our images. 
+- queries folder: storage query images, like some photos in dataset
+
+#### use
+
+- python root.py
+
+
+
+-----
+
+
+
+## The problem is following:
+
 #### First: the features need to add:
 
 -  import file path
@@ -24,7 +50,7 @@
 -  global variable and local variable
 -  command doesn't work in Button wiget : command = ... 
 
-​		and I wanna deliver parameters of imagepath so Ghlin use lambda p : lambda : callback(imgpath) 
+			and I wanna deliver parameters of imagepath so Ghlin use lambda p : lambda : callback(imgpath) 
 		-> use bind widget can bind Button-1 to the function (but the trouble is every function can use that)
 
 -  list of button and append that 
